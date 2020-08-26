@@ -3,13 +3,13 @@ var ArrayElements = [];
 const HighlightColor = "orange"
 const DefaultColor = "#333333"
 const CompletedColor = "green"
+const TraverseColor = "purple"
 const slowSpeed = 1000
 const mediumSpeed = 100
 const highSpeed = 10
 
 function createNumberBars(ArrayElements){
     var VisualArea = document.getElementById("SortingArea")
-    console.log(screen.availWidth)
     var WidthOfBars = screen.availWidth/(ArrayElements.length)
     VisualArea.innerHTML = ''
     var a= 0;
@@ -81,6 +81,32 @@ async function BubbleSort(Numbers){
     InputSubmitButton.disabled = false
 }
 
+async function SelectionSort(Numbers){
+    for(var i=0; i<Numbers.length; i++){
+        var maxInd = 0
+        SetBarsColor([0], HighlightColor)
+        for(var j=1; j<Numbers.length-i; j++){
+            SetBarsColor([j], TraverseColor)
+            await sleep(mediumSpeed)
+            if(Numbers[j] > Numbers[maxInd]){
+                SetBarsColor([maxInd], DefaultColor)
+                maxInd = j
+                SetBarsColor([maxInd], HighlightColor)
+            }
+            else{
+                SetBarsColor([j], DefaultColor)
+            }
+        }
+        Swapbars(maxInd, Numbers.length-i-1)
+        SwapNumbers(Numbers, Numbers.length-i-1, maxInd)
+        SetBarsColor([maxInd], DefaultColor)
+        SetBarsColor([Numbers.length-i-1], CompletedColor)
+    }
+    InputSubmitButton = document.getElementById('InputSubmitButton')
+    InputSubmitButton.disabled = false
+    console.log(Numbers)
+}
+
 function OnClickInsertAnArray(){
     if(!InsertArrayClicked){
         InsertArrayClicked = true;
@@ -108,12 +134,12 @@ function OnClickInsertAnArray(){
 
 function OnClickInputSubmitButton(){
     var UserInput = document.getElementById("InputTextArea").value
-    var Numbers = UserInput.split(' ')
+    var SplitArray = UserInput.split(' ')
     ArrayElements = []
-    if( Numbers.length != 0){
-        for(var i=0; i< Numbers.length; i++){
-            if( isNaN(Numbers[i]) == false && Numbers[i] != "" ){
-                ArrayElements.push(parseInt(Numbers[i]))
+    if( SplitArray.length != 0){
+        for(var i=0; i< SplitArray.length; i++){
+            if( isNaN(SplitArray[i]) == false && SplitArray[i] != "" ){
+                ArrayElements.push(parseInt(SplitArray[i]))
             }
         }
         var SortingChoice = document.getElementById('SortingAlgos').value;
@@ -124,7 +150,7 @@ function OnClickInputSubmitButton(){
             BubbleSort(ArrayElements)
         }
         else if( SortingChoice == "Selection" ){
-            console.log(SortingChoice)
+            SelectionSort(ArrayElements)
         }
         else if( SortingChoice == "Insertion" ){
             console.log(SortingChoice)
