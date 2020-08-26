@@ -2,8 +2,10 @@ var InsertArrayClicked = false;
 var ArrayElements = [];
 const HighlightColor = "orange"
 const DefaultColor = "#333333"
+const CompletedColor = "green"
+const slowSpeed = 1000
 const mediumSpeed = 100
-const fastSpeed = 10
+const highSpeed = 10
 
 function createNumberBars(ArrayElements){
     var VisualArea = document.getElementById("SortingArea")
@@ -23,12 +25,12 @@ function createNumberBars(ArrayElements){
     window.scrollTo(0,document.body.scrollHeight);
 }
 
-function SetBarsColor(index1, index2, color){
+function SetBarsColor(BarsIndices, color){
     var AllBars = document.getElementById("SortingArea").childNodes
-    var Bar1 = AllBars[index1]
-    var Bar2 = AllBars[index2]
-    Bar1.style.backgroundColor = color
-    Bar2.style.backgroundColor = color
+    for(var i=0; i<BarsIndices.length; i++){
+        var temp = AllBars[BarsIndices[i]]
+        temp.style.backgroundColor = color
+    }
 }
 
 function Swapbars(index1, index2){
@@ -53,22 +55,27 @@ function sleep (time) {
 }
 
 async function BubbleSort(Numbers){
-    //50 60 20 30 10 50 60 70 200
     for(var i=0; i<Numbers.length; i++){
         var swapped = false
         for(var j=0; j<Numbers.length-i-1; j++){
             if( Numbers[j] > Numbers[j+1] ){
-                setTimeout(SetBarsColor(j, j+1, HighlightColor))
-                await sleep(fastSpeed)
+                SetBarsColor([j, j+1], HighlightColor)
+                await sleep(mediumSpeed)
                 Swapbars(j, j+1)
-                SetBarsColor(j, j+1, DefaultColor)
+                SetBarsColor([j, j+1], DefaultColor)
                 SwapNumbers(Numbers, j, j+1)
                 swapped = true
             }
         }
         if(!swapped){
+            var RangeArray = []
+            for(var i=0; i < Numbers.length-i-1; i++){
+                RangeArray.push(i)
+            }
+            SetBarsColor(RangeArray, CompletedColor)
             break
         }
+        SetBarsColor([Numbers.length-i-1], CompletedColor)
     }
     console.log(Numbers)
 }
