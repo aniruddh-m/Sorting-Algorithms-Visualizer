@@ -77,7 +77,8 @@ async function BubbleSort(Numbers){
         }
         SetBarsColor([Numbers.length-i-1], CompletedColor)
     }
-    console.log(Numbers)
+    InputSubmitButton = document.getElementById('InputSubmitButton')
+    InputSubmitButton.disabled = false
 }
 
 function OnClickInsertAnArray(){
@@ -106,7 +107,6 @@ function OnClickInsertAnArray(){
 }
 
 function OnClickInputSubmitButton(){
-    console.log("Submit button clicked")
     var UserInput = document.getElementById("InputTextArea").value
     var Numbers = UserInput.split(' ')
     ArrayElements = []
@@ -117,6 +117,8 @@ function OnClickInputSubmitButton(){
             }
         }
         var SortingChoice = document.getElementById('SortingAlgos').value;
+        var InputSubmitButton = document.getElementById('InputSubmitButton')
+        InputSubmitButton.disabled = true
         createNumberBars(ArrayElements)
         if( SortingChoice == "Bubble" ){
             BubbleSort(ArrayElements)
