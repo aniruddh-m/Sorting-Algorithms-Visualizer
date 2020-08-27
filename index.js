@@ -38,9 +38,12 @@ function Swapbars(index1, index2){
     var AllBars = document.getElementById("SortingArea").childNodes
     var Bar1 = AllBars[index1]
     var Bar2 = AllBars[index2]
-    temp = Bar2.style.height
+    tempH = Bar2.style.height
+    tempBC = Bar2.style.backgroundColor
     Bar2.style.height = Bar1.style.height
-    Bar1.style.height = temp
+    Bar2.style.backgroundColor = Bar1.style.backgroundColor
+    Bar1.style.height = tempH
+    Bar1.style.backgroundColor = tempBC
 }
 
 function SwapNumbers(Array, index1, index2){
@@ -52,6 +55,14 @@ function SwapNumbers(Array, index1, index2){
 
 function sleep (time) {
     return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+function range(Start, End){
+    var RangeArray = []
+    for(var i=Start; i < End; i++){
+        RangeArray.push(i)
+    }
+    return RangeArray
 }
 
 async function BubbleSort(Numbers){
@@ -68,10 +79,7 @@ async function BubbleSort(Numbers){
             }
         }
         if(!swapped){
-            var RangeArray = []
-            for(var i=0; i < Numbers.length-i-1; i++){
-                RangeArray.push(i)
-            }
+            var RangeArray = range(0, Numbers.length-i)
             SetBarsColor(RangeArray, CompletedColor)
             break
         }
@@ -104,7 +112,26 @@ async function SelectionSort(Numbers){
     }
     InputSubmitButton = document.getElementById('InputSubmitButton')
     InputSubmitButton.disabled = false
-    console.log(Numbers)
+}
+
+async function InsertionSort(Numbers){
+    for(var i=1; i<Numbers.length; i++){
+        j = i-1
+        SetBarsColor([i], HighlightColor)
+        while(Numbers[j] > Numbers[j+1] && j >= 0){
+            await sleep(mediumSpeed)
+            SwapNumbers(Numbers, j, j+1)
+            Swapbars(j, j+1)
+            j = j-1
+        }
+        SetBarsColor([j+1], DefaultColor)
+        var RangeArray = range(0, i+1)
+        SetBarsColor(RangeArray, TraverseColor)
+    }
+    var RangeArray = range(0, i)
+    SetBarsColor(RangeArray, CompletedColor)
+    InputSubmitButton = document.getElementById('InputSubmitButton')
+    InputSubmitButton.disabled = false
 }
 
 function OnClickInsertAnArray(){
@@ -153,7 +180,7 @@ function OnClickInputSubmitButton(){
             SelectionSort(ArrayElements)
         }
         else if( SortingChoice == "Insertion" ){
-            console.log(SortingChoice)
+            InsertionSort(ArrayElements)
         }
         else if( SortingChoice == "Merge" ){
             console.log(SortingChoice)
