@@ -34,7 +34,6 @@ function SetBarsColor(BarsIndices, color){
 }
 
 function Swapbars(index1, index2){
-    var temp
     var AllBars = document.getElementById("SortingArea").childNodes
     var Bar1 = AllBars[index1]
     var Bar2 = AllBars[index2]
@@ -53,7 +52,16 @@ function SwapNumbers(Array, index1, index2){
     Array[index2] = temp
 }
 
-function sleep (time) {
+function SynchronousDelay(time){
+    start = new Date()
+    do {
+        end = new Date()
+    }
+    while(end - start < time)
+
+}
+
+function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
@@ -63,6 +71,15 @@ function range(Start, End){
         RangeArray.push(i)
     }
     return RangeArray
+}
+
+function InsertElementInSpecifiedPosition(Source, Destination){
+    var SortingArea = document.getElementById("SortingArea")
+    var AllBars = document.getElementById("SortingArea").childNodes
+    var ElementToMove = AllBars[Source]
+    SortingArea.removeChild(ElementToMove)
+    SortingArea.insertBefore(ElementToMove, AllBars[Destination])
+    
 }
 
 async function BubbleSort(Numbers){
@@ -134,6 +151,59 @@ async function InsertionSort(Numbers){
     InputSubmitButton.disabled = false
 }
 
+async function Merge(Numbers, left, mid, right){
+    var ptr1 = 0, ptr2 = 0, LeftArray = [], RightArray = [], absPos = 0
+    for(var i=0; i<=mid-left; i++){
+        LeftArray.push(Numbers[left+i])
+    }
+    for(var i=0; i<=right-(mid+1); i++){
+        RightArray.push(Numbers[mid+1+i])
+    }
+    while(ptr1 <= mid-left && ptr2 <= right-(mid+1)){
+        SetBarsColor([left+ptr1, mid+1+ptr2], HighlightColor)
+        if(LeftArray[ptr1] <= RightArray[ptr2]){
+            Numbers[left+absPos] = LeftArray[ptr1]
+            ptr1++;
+            absPos++;
+        }
+        else{
+            Numbers[left+absPos] = RightArray[ptr2]
+            InsertElementInSpecifiedPosition(mid+1+ptr2, left+absPos)
+            ptr2++;
+            absPos++;
+        }
+
+    }
+
+    while(ptr1 <= mid-left){
+        Numbers[left+absPos] = LeftArray[ptr1]
+        ptr1++;
+        absPos++;        
+    }
+
+    while(ptr2 <= right-(mid+1)){
+        Numbers[left+absPos] = RightArray[ptr2]
+        ptr2++;
+        absPos++;       
+    }
+}
+
+function MergeSort(Numbers, left, right){
+    if(right - left >= 1){
+        var mid = Math.floor((left+right)/2)
+        MergeSort(Numbers, left, mid)
+        MergeSort(Numbers, mid+1, right)
+        Merge(Numbers, left, mid, right)
+    }
+}
+
+function MergeSortDriver(Numbers){
+    MergeSort(Numbers, 0, Numbers.length-1)
+    console.log(Numbers)
+    InputSubmitButton = document.getElementById('InputSubmitButton')
+    InputSubmitButton.disabled = false
+}
+
 function OnClickInsertAnArray(){
     if(!InsertArrayClicked){
         InsertArrayClicked = true;
@@ -183,7 +253,7 @@ function OnClickInputSubmitButton(){
             InsertionSort(ArrayElements)
         }
         else if( SortingChoice == "Merge" ){
-            console.log(SortingChoice)
+            MergeSortDriver(ArrayElements)
         }
         else if( SortingChoice == "Heap" ){
             console.log(SortingChoice)
