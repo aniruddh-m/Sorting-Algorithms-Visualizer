@@ -37,8 +37,8 @@ function Swapbars(index1, index2){
     var AllBars = document.getElementById("SortingArea").childNodes
     var Bar1 = AllBars[index1]
     var Bar2 = AllBars[index2]
-    tempH = Bar2.style.height
-    tempBC = Bar2.style.backgroundColor
+    var tempH = Bar2.style.height
+    var tempBC = Bar2.style.backgroundColor
     Bar2.style.height = Bar1.style.height
     Bar2.style.backgroundColor = Bar1.style.backgroundColor
     Bar1.style.height = tempH
@@ -52,7 +52,7 @@ function SwapNumbers(Array, index1, index2){
     Array[index2] = temp
 }
 
-function sleep(time) {
+function sleep(time){
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
@@ -71,6 +71,11 @@ function InsertElementInSpecifiedPosition(Source, Destination){
     SortingArea.removeChild(ElementToMove)
     SortingArea.insertBefore(ElementToMove, AllBars[Destination])
     
+}
+
+function SetSubmitButtonDisabledState(state){
+    InputSubmitButton = document.getElementById('InputSubmitButton')
+    InputSubmitButton.disabled = state
 }
 
 async function BubbleSort(Numbers){
@@ -93,8 +98,7 @@ async function BubbleSort(Numbers){
         }
         SetBarsColor([Numbers.length-i-1], CompletedColor)
     }
-    InputSubmitButton = document.getElementById('InputSubmitButton')
-    InputSubmitButton.disabled = false
+    SetSubmitButtonDisabledState(false)
 }
 
 async function SelectionSort(Numbers){
@@ -118,8 +122,7 @@ async function SelectionSort(Numbers){
         SetBarsColor([maxInd], DefaultColor)
         SetBarsColor([Numbers.length-i-1], CompletedColor)
     }
-    InputSubmitButton = document.getElementById('InputSubmitButton')
-    InputSubmitButton.disabled = false
+    SetSubmitButtonDisabledState(false)
 }
 
 async function InsertionSort(Numbers){
@@ -138,8 +141,7 @@ async function InsertionSort(Numbers){
     }
     var RangeArray = range(0, i)
     SetBarsColor(RangeArray, CompletedColor)
-    InputSubmitButton = document.getElementById('InputSubmitButton')
-    InputSubmitButton.disabled = false
+    SetSubmitButtonDisabledState(false)
 }
 
 async function Merge(Numbers, left, mid, right){
@@ -154,7 +156,7 @@ async function Merge(Numbers, left, mid, right){
     while(ptr1 <= mid-left && ptr2 <= right-(mid+1)){
         SetBarsColor([left+absPos], HighlightColor)
         SetBarsColor([mid+1+ptr2], TraverseColor)
-        await sleep(slowSpeed)
+        await sleep(mediumSpeed)
         if(LeftArray[ptr1] <= RightArray[ptr2]){
             Numbers[left+absPos] = LeftArray[ptr1]
             SetBarsColor([left+absPos, mid+1+ptr2], DefaultColor)
@@ -164,7 +166,7 @@ async function Merge(Numbers, left, mid, right){
         else{
             Numbers[left+absPos] = RightArray[ptr2]
             InsertElementInSpecifiedPosition(mid+1+ptr2, left+absPos)
-            await sleep(slowSpeed)
+            await sleep(mediumSpeed)
             SetBarsColor([mid+1+ptr2, left+absPos, left+absPos+1], DefaultColor)
             ptr2++;
             absPos++;
@@ -194,17 +196,48 @@ async function MergeSort(Numbers, left, right){
     }
 }
 
-function SetSubmitButtonDisabledState(state){
-    InputSubmitButton = document.getElementById('InputSubmitButton')
-    InputSubmitButton.disabled = state
-}
-
 async function MergeSortDriver(Numbers){
     await MergeSort(Numbers, 0, Numbers.length-1)
     var RangeArray;
     RangeArray = range(0, Numbers.length)
     SetBarsColor(RangeArray, CompletedColor)
     SetSubmitButtonDisabledState(false)
+}
+
+async function QuickSortPartition(Numbers, left, right, PartitionIndex){
+    var i = left - 1
+    var pivot = Numbers[right]
+    SetBarsColor([right], HighlightColor)
+    for(var j=left; j < right; j++){
+        if(Numbers[j] < pivot){
+            i++
+            await sleep(mediumSpeed)
+            Swapbars(j, i)
+            await sleep(mediumSpeed)
+            SwapNumbers(Numbers, j, i)
+        }
+    }
+    SwapNumbers(Numbers, right, i+1)
+    Swapbars(right, i+1)
+    await sleep(mediumSpeed)
+    PartitionIndex[0] = i+1
+}
+
+async function QuickSort(Numbers, left, right){
+    if(left < right){
+        var PartitionIndex = [-1]
+        await QuickSortPartition(Numbers, left, right, PartitionIndex)
+        SetBarsColor([PartitionIndex[0]], CompletedColor)
+        await QuickSort(Numbers, left, PartitionIndex[0]-1)
+        await QuickSort(Numbers, PartitionIndex[0]+1, right)
+        console.log(Numbers)
+    }
+}
+
+async function QuickSortDriver(Numbers){
+    await QuickSort(Numbers, 0, Numbers.length-1)
+    SetSubmitButtonDisabledState(false)
+    console.log(Numbers)
 }
 
 function OnClickInsertAnArray(){
@@ -257,10 +290,10 @@ function OnClickInputSubmitButton(){
         else if( SortingChoice == "Merge" ){
             MergeSortDriver(ArrayElements)
         }
-        else if( SortingChoice == "Heap" ){
-            console.log(SortingChoice)
-        }
         else if( SortingChoice == "Quick" ){
+            QuickSortDriver(ArrayElements)
+        }
+        else if( SortingChoice == "Heap" ){
             console.log(SortingChoice)
         }
     }
