@@ -159,16 +159,20 @@ async function Merge(Numbers, left, mid, right){
     for(var i=0; i<=right-(mid+1); i++){
         RightArray.push(Numbers[mid+1+i])
     }
+    
     while(ptr1 <= mid-left && ptr2 <= right-(mid+1)){
         SetBarsColor([left+ptr1, mid+1+ptr2], HighlightColor)
+        await sleep(mediumSpeed)
         if(LeftArray[ptr1] <= RightArray[ptr2]){
             Numbers[left+absPos] = LeftArray[ptr1]
+            SetBarsColor([left+ptr1, mid+1+ptr2], DefaultColor)
             ptr1++;
             absPos++;
         }
         else{
             Numbers[left+absPos] = RightArray[ptr2]
             InsertElementInSpecifiedPosition(mid+1+ptr2, left+absPos)
+            SetBarsColor([left+ptr1, left+absPos], DefaultColor)
             ptr2++;
             absPos++;
         }
@@ -188,18 +192,17 @@ async function Merge(Numbers, left, mid, right){
     }
 }
 
-function MergeSort(Numbers, left, right){
+async function MergeSort(Numbers, left, right){
     if(right - left >= 1){
         var mid = Math.floor((left+right)/2)
-        MergeSort(Numbers, left, mid)
-        MergeSort(Numbers, mid+1, right)
-        Merge(Numbers, left, mid, right)
+        await MergeSort(Numbers, left, mid)
+        await MergeSort(Numbers, mid+1, right)
+        await Merge(Numbers, left, mid, right)
     }
 }
 
 function MergeSortDriver(Numbers){
     MergeSort(Numbers, 0, Numbers.length-1)
-    console.log(Numbers)
     InputSubmitButton = document.getElementById('InputSubmitButton')
     InputSubmitButton.disabled = false
 }
