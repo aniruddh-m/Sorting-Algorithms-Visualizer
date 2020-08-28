@@ -52,15 +52,6 @@ function SwapNumbers(Array, index1, index2){
     Array[index2] = temp
 }
 
-function SynchronousDelay(time){
-    start = new Date()
-    do {
-        end = new Date()
-    }
-    while(end - start < time)
-
-}
-
 function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
@@ -161,18 +152,20 @@ async function Merge(Numbers, left, mid, right){
     }
     
     while(ptr1 <= mid-left && ptr2 <= right-(mid+1)){
-        SetBarsColor([left+ptr1, mid+1+ptr2], HighlightColor)
-        await sleep(mediumSpeed)
+        SetBarsColor([left+absPos], HighlightColor)
+        SetBarsColor([mid+1+ptr2], TraverseColor)
+        await sleep(slowSpeed)
         if(LeftArray[ptr1] <= RightArray[ptr2]){
             Numbers[left+absPos] = LeftArray[ptr1]
-            SetBarsColor([left+ptr1, mid+1+ptr2], DefaultColor)
+            SetBarsColor([left+absPos, mid+1+ptr2], DefaultColor)
             ptr1++;
             absPos++;
         }
         else{
             Numbers[left+absPos] = RightArray[ptr2]
             InsertElementInSpecifiedPosition(mid+1+ptr2, left+absPos)
-            SetBarsColor([left+ptr1, left+absPos], DefaultColor)
+            await sleep(slowSpeed)
+            SetBarsColor([mid+1+ptr2, left+absPos, left+absPos+1], DefaultColor)
             ptr2++;
             absPos++;
         }
@@ -201,10 +194,17 @@ async function MergeSort(Numbers, left, right){
     }
 }
 
-function MergeSortDriver(Numbers){
-    MergeSort(Numbers, 0, Numbers.length-1)
+function SetSubmitButtonDisabledState(state){
     InputSubmitButton = document.getElementById('InputSubmitButton')
-    InputSubmitButton.disabled = false
+    InputSubmitButton.disabled = state
+}
+
+async function MergeSortDriver(Numbers){
+    await MergeSort(Numbers, 0, Numbers.length-1)
+    var RangeArray;
+    RangeArray = range(0, Numbers.length)
+    SetBarsColor(RangeArray, CompletedColor)
+    SetSubmitButtonDisabledState(false)
 }
 
 function OnClickInsertAnArray(){
@@ -243,8 +243,7 @@ function OnClickInputSubmitButton(){
             }
         }
         var SortingChoice = document.getElementById('SortingAlgos').value;
-        var InputSubmitButton = document.getElementById('InputSubmitButton')
-        InputSubmitButton.disabled = true
+        SetSubmitButtonDisabledState(true)
         createNumberBars(ArrayElements)
         if( SortingChoice == "Bubble" ){
             BubbleSort(ArrayElements)
