@@ -1,8 +1,8 @@
 var InsertArrayClicked = false;
 var ArrayElements = [];
-const HighlightColor = "orange"
-const DefaultColor = "#333333"
-const CompletedColor = "green"
+const HighlightColor = "SlateBlue"
+const DefaultColor = "Gray"
+const CompletedColor = "#82b74b"
 const TraverseColor = "purple"
 const slowSpeed = 1000
 const mediumSpeed = 100
@@ -14,10 +14,15 @@ function createNumberBars(ArrayElements){
     VisualArea.innerHTML = ''
     var a= 0;
     for(var i=0; i<ArrayElements.length; i++){
+        var ElementValue = document.createElement("p")
+        ElementValue.innerHTML = ArrayElements[i].toString()
+        ElementValue.style.textAlign = "center"
+        ElementValue.style.color = "black"
         var Element = document.createElement("span");
+        Element.appendChild(ElementValue)
         Element.style.width = (WidthOfBars*3/4).toString() + "px"
         Element.style.height = (ArrayElements[i]*2).toString() + "px"
-        Element.style.backgroundColor = "#333333"
+        Element.style.backgroundColor = DefaultColor
         Element.style.marginRight = (WidthOfBars/5).toString() + "px"
         Element.style.display = "inline-block"
         VisualArea.appendChild(Element)
@@ -37,12 +42,16 @@ function Swapbars(index1, index2){
     var AllBars = document.getElementById("SortingArea").childNodes
     var Bar1 = AllBars[index1]
     var Bar2 = AllBars[index2]
+    var SwapVal = Bar2.childNodes[0].innerHTML
+    console.log(SwapVal)
     var tempH = Bar2.style.height
     var tempBC = Bar2.style.backgroundColor
+    Bar2.childNodes[0].innerHTML = Bar1.childNodes[0].innerHTML
     Bar2.style.height = Bar1.style.height
     Bar2.style.backgroundColor = Bar1.style.backgroundColor
     Bar1.style.height = tempH
     Bar1.style.backgroundColor = tempBC
+    Bar1.childNodes[0].innerHTML = SwapVal
 }
 
 function SwapNumbers(Array, index1, index2){
