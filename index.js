@@ -24,7 +24,6 @@ function createNumberBars(ArrayElements){
         Element.style.display = "inline-block"
         VisualArea.appendChild(Element)
     }
-    window.scrollTo(0,document.body.scrollHeight);
 }
 
 function SetBarsColor(BarsIndices, color){
@@ -332,9 +331,9 @@ function OnClickInsertAnArray(){
         InsertArrayClicked = true;
         var InputArea = document.getElementById("InputArea");
         InputArea.innerHTML = '\
-        <div class="row" style="padding-top: 10px;padding-left: 10px">\
+        <div class="row" style="padding-top: 10px;padding-left: 200px">\
             <div style="padding-left: 4px; padding-right: 2px" class="col-md-12">\
-                <textarea style="width: 600px;" id="InputTextArea" placeholder="Input space separated numbers here"></textarea>\
+                <textarea style="width: 900px;" id="InputTextArea" placeholder="Input space separated numbers here"></textarea>\
             </div>\
             <button onclick="OnClickInputSubmitButton()" id="InputSubmitButton" type = "button" class="btn" style="background-color: #008CBA; color: white;">Submit</button>\
         </div>'
@@ -347,28 +346,56 @@ function OnClickInsertAnArray(){
 }
 
 function OnClickInputSubmitButton(){
-    var StartSortingButton = document.getElementById("StartSortingButton")
-    if(StartSortingButton){
-        document.getElementById("TopBar").removeChild(StartSortingButton)
-    }
     var UserInput = document.getElementById("InputTextArea").value
     var SplitArray = UserInput.split(' ')
     ArrayElements = []
+    InvalidEntry = false
     if( SplitArray.length != 0){
         for(var i=0; i< SplitArray.length; i++){
             if( isNaN(SplitArray[i]) == false && SplitArray[i] != "" ){
-                ArrayElements.push(parseInt(SplitArray[i]))
+                NumberToAdd = parseInt(SplitArray[i])
+                if(NumberToAdd > 250){
+                    alert("Enter elements less than or equal to 250")
+                    ArrayElements = []
+                    break
+                }
+                else if(NumberToAdd >= 0){
+                    ArrayElements.push(NumberToAdd)
+                }
+                else{
+                    InvalidEntry = true
+                }
+            }
+            else{
+                InvalidEntry = true
             }
         }
-        createNumberBars(ArrayElements)
-        SortTheArray()
+
+        if(InvalidEntry){
+            alert("All negative numbers will be ignored")
+        }
+        if(ArrayElements.length >= 60){
+            alert("Enter fewer than 60 elements")
+            ArrayElements = []
+        }
+        if(ArrayElements.length == 0){
+            ArrayElements = []
+        }
+        else{
+            var StartSortingButton = document.getElementById("StartSortingButton")
+            if(StartSortingButton){
+                document.getElementById("TopBar").removeChild(StartSortingButton)
+            }
+            createNumberBars(ArrayElements)
+            SortTheArray()
+        }
     }
 }
 
 function GenerateRandomArray(){
     ArrayElements = []
     for(var i=0; i<15; i++){
-        ArrayElements.push(Math.floor(Math.random()*250)+1)
+        ArrayElements.push(Math.floor(Math.random()*249)+1)
     }
     createNumberBars(ArrayElements)
     var TopBar = document.getElementById("TopBar");
