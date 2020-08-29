@@ -313,20 +313,14 @@ async function HeapSortDriver(Numbers){
 function OnClickInsertAnArray(){
     if(!InsertArrayClicked){
         InsertArrayClicked = true;
-        var InputTextArea = document.createElement("textarea");
-        InputTextArea.setAttribute("id", "InputTextArea");
-        
-        var InfoMessage = document.createTextNode("Enter numbers separated by space:"); 
-        var SubmitButtonText = document.createTextNode("Submit"); 
-        var InputSubmitButton = document.createElement("button");
-        InputSubmitButton.setAttribute("id", "InputSubmitButton");
-        InputSubmitButton.setAttribute("onclick", "OnClickInputSubmitButton()");
-        InputSubmitButton.appendChild(SubmitButtonText)
-        
         var InputArea = document.getElementById("InputArea");
-        InputArea.appendChild(InfoMessage);
-        InputArea.appendChild(InputTextArea);
-        InputArea.appendChild(InputSubmitButton);
+        InputArea.innerHTML = '\
+        <div class="row" style="padding-top: 10px;padding-left: 10px">\
+            <div style="padding-left: 4px; padding-right: 2px" class="col-md-12">\
+                <textarea style="width: 600px;" id="InputTextArea" placeholder="Input space separated numbers here"></textarea>\
+            </div>\
+            <button onclick="OnClickInputSubmitButton()" id="InputSubmitButton" type = "button" class="btn" style="background-color: #008CBA; color: white;">Submit</button>\
+        </div>'
     }
     else{
         InsertArrayClicked = false;
