@@ -73,9 +73,19 @@ function InsertElementInSpecifiedPosition(Source, Destination){
     
 }
 
-function SetSubmitButtonDisabledState(state){
+function DisableButtons(state){
     InputSubmitButton = document.getElementById('InputSubmitButton')
-    InputSubmitButton.disabled = state
+    if(InputSubmitButton){
+        InputSubmitButton.disabled = state
+    }
+    GenerateRandomArrayButton = document.getElementById('GenerateRandomArrayButton')
+    if(GenerateRandomArrayButton){
+        GenerateRandomArrayButton.disabled = state
+    }    
+    InsertAnArray = document.getElementById('InsertAnArray')
+    if(InsertAnArray){
+        InsertAnArray.disabled = state
+    }
 }
 
 async function BubbleSort(Numbers){
@@ -98,7 +108,7 @@ async function BubbleSort(Numbers){
         }
         SetBarsColor([Numbers.length-i-1], CompletedColor)
     }
-    SetSubmitButtonDisabledState(false)
+    DisableButtons(false)
 }
 
 async function SelectionSort(Numbers){
@@ -122,7 +132,7 @@ async function SelectionSort(Numbers){
         SetBarsColor([maxInd], DefaultColor)
         SetBarsColor([Numbers.length-i-1], CompletedColor)
     }
-    SetSubmitButtonDisabledState(false)
+    DisableButtons(false)
 }
 
 async function InsertionSort(Numbers){
@@ -141,7 +151,7 @@ async function InsertionSort(Numbers){
     }
     var RangeArray = range(0, i)
     SetBarsColor(RangeArray, CompletedColor)
-    SetSubmitButtonDisabledState(false)
+    DisableButtons(false)
 }
 
 async function Merge(Numbers, left, mid, right){
@@ -201,7 +211,7 @@ async function MergeSortDriver(Numbers){
     var RangeArray;
     RangeArray = range(0, Numbers.length)
     SetBarsColor(RangeArray, CompletedColor)
-    SetSubmitButtonDisabledState(false)
+    DisableButtons(false)
 }
 
 async function QuickSortPartition(Numbers, left, right, PartitionIndex){
@@ -240,7 +250,7 @@ async function QuickSort(Numbers, left, right){
 
 async function QuickSortDriver(Numbers){
     await QuickSort(Numbers, 0, Numbers.length-1)
-    SetSubmitButtonDisabledState(false)
+    DisableButtons(false)
     RangeArray = range(0, Numbers.length)
     SetBarsColor(RangeArray, CompletedColor)
 }
@@ -307,7 +317,7 @@ async function HeapSort(Numbers){
 async function HeapSortDriver(Numbers){
     await HeapSort(Numbers)
     SetBarsColor([0], CompletedColor)
-    SetSubmitButtonDisabledState(false)
+    DisableButtons(false)
 }
 
 function OnClickInsertAnArray(){
@@ -343,7 +353,6 @@ function OnClickInputSubmitButton(){
                 ArrayElements.push(parseInt(SplitArray[i]))
             }
         }
-        SetSubmitButtonDisabledState(true)
         createNumberBars(ArrayElements)
         SortTheArray()
     }
@@ -359,13 +368,20 @@ function GenerateRandomArray(){
     if(!document.getElementById("StartSortingButton")){
         var StartSortingButton = document.createElement("button")
         StartSortingButton.setAttribute("id", "StartSortingButton")
+        StartSortingButton.setAttribute("onclick", "StartRandomArraySort()")
         var TextStartSort = document.createTextNode("Sort the generated array")
         StartSortingButton.appendChild(TextStartSort)
         TopBar.appendChild(StartSortingButton)
     }
 }
 
+function StartRandomArraySort(){
+    document.getElementById("TopBar").removeChild(StartSortingButton)
+    SortTheArray()
+}
+
 function SortTheArray(){
+    DisableButtons(true)
     var SortingChoice = document.getElementById('SortingAlgos').value;
     if( SortingChoice == "Bubble" ){
         BubbleSort(ArrayElements)
