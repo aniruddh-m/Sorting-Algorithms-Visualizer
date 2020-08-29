@@ -339,26 +339,38 @@ function OnClickInputSubmitButton(){
                 ArrayElements.push(parseInt(SplitArray[i]))
             }
         }
-        var SortingChoice = document.getElementById('SortingAlgos').value;
         SetSubmitButtonDisabledState(true)
-        createNumberBars(ArrayElements)
-        if( SortingChoice == "Bubble" ){
-            BubbleSort(ArrayElements)
-        }
-        else if( SortingChoice == "Selection" ){
-            SelectionSort(ArrayElements)
-        }
-        else if( SortingChoice == "Insertion" ){
-            InsertionSort(ArrayElements)
-        }
-        else if( SortingChoice == "Merge" ){
-            MergeSortDriver(ArrayElements)
-        }
-        else if( SortingChoice == "Quick" ){
-            QuickSortDriver(ArrayElements)
-        }
-        else if( SortingChoice == "Heap" ){
-            HeapSortDriver(ArrayElements)
-        }
+        SortTheArray()
+    }
+}
+
+function GenerateRandomArray(){
+    ArrayElements = []
+    for(var i=0; i<15; i++){
+        ArrayElements.push(Math.floor(Math.random()*250)+1)
+    }
+    SortTheArray()
+}
+
+function SortTheArray(){
+    var SortingChoice = document.getElementById('SortingAlgos').value;
+    createNumberBars(ArrayElements)
+    if( SortingChoice == "Bubble" ){
+        BubbleSort(ArrayElements)
+    }
+    else if( SortingChoice == "Selection" ){
+        SelectionSort(ArrayElements)
+    }
+    else if( SortingChoice == "Insertion" ){
+        InsertionSort(ArrayElements)
+    }
+    else if( SortingChoice == "Merge" ){
+        MergeSortDriver(ArrayElements)
+    }
+    else if( SortingChoice == "Quick" ){
+        QuickSortDriver(ArrayElements)
+    }
+    else if( SortingChoice == "Heap" ){
+        HeapSortDriver(ArrayElements)
     }
 }
