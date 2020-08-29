@@ -330,6 +330,10 @@ function OnClickInsertAnArray(){
 }
 
 function OnClickInputSubmitButton(){
+    var StartSortingButton = document.getElementById("StartSortingButton")
+    if(StartSortingButton){
+        document.getElementById("TopBar").removeChild(StartSortingButton)
+    }
     var UserInput = document.getElementById("InputTextArea").value
     var SplitArray = UserInput.split(' ')
     ArrayElements = []
@@ -340,6 +344,7 @@ function OnClickInputSubmitButton(){
             }
         }
         SetSubmitButtonDisabledState(true)
+        createNumberBars(ArrayElements)
         SortTheArray()
     }
 }
@@ -349,12 +354,19 @@ function GenerateRandomArray(){
     for(var i=0; i<15; i++){
         ArrayElements.push(Math.floor(Math.random()*250)+1)
     }
-    SortTheArray()
+    createNumberBars(ArrayElements)
+    var TopBar = document.getElementById("TopBar");
+    if(!document.getElementById("StartSortingButton")){
+        var StartSortingButton = document.createElement("button")
+        StartSortingButton.setAttribute("id", "StartSortingButton")
+        var TextStartSort = document.createTextNode("Sort the generated array")
+        StartSortingButton.appendChild(TextStartSort)
+        TopBar.appendChild(StartSortingButton)
+    }
 }
 
 function SortTheArray(){
     var SortingChoice = document.getElementById('SortingAlgos').value;
-    createNumberBars(ArrayElements)
     if( SortingChoice == "Bubble" ){
         BubbleSort(ArrayElements)
     }
