@@ -209,17 +209,22 @@ async function QuickSortPartition(Numbers, left, right, PartitionIndex){
     var pivot = Numbers[right]
     SetBarsColor([right], HighlightColor)
     for(var j=left; j < right; j++){
+        SetBarsColor([i+1, j], TraverseColor)
+        await sleep(slowSpeed)
         if(Numbers[j] < pivot){
             i++
-            await sleep(mediumSpeed)
             Swapbars(j, i)
-            await sleep(mediumSpeed)
             SwapNumbers(Numbers, j, i)
+            await sleep(slowSpeed)
+            SetBarsColor([i, j], DefaultColor)
+        }
+        else{
+            SetBarsColor([i+1, j], DefaultColor)
         }
     }
     SwapNumbers(Numbers, right, i+1)
     Swapbars(right, i+1)
-    await sleep(mediumSpeed)
+    await sleep(slowSpeed)
     PartitionIndex[0] = i+1
 }
 
@@ -230,14 +235,79 @@ async function QuickSort(Numbers, left, right){
         SetBarsColor([PartitionIndex[0]], CompletedColor)
         await QuickSort(Numbers, left, PartitionIndex[0]-1)
         await QuickSort(Numbers, PartitionIndex[0]+1, right)
-        console.log(Numbers)
     }
 }
 
 async function QuickSortDriver(Numbers){
     await QuickSort(Numbers, 0, Numbers.length-1)
     SetSubmitButtonDisabledState(false)
-    console.log(Numbers)
+    RangeArray = range(0, Numbers.length)
+    SetBarsColor(RangeArray, CompletedColor)
+}
+
+async function Max_Heapify(Numbers, i, n){
+    var largestNodeIndex = i
+    var left = 2*i + 1, right = 2*i + 2
+
+    SetBarsColor([i], TraverseColor)
+    if(left < n){
+        SetBarsColor([left], TraverseColor)
+    }
+    if(right < n){
+        SetBarsColor([right], TraverseColor)
+    }
+    await sleep(slowSpeed)
+
+    if(left < n && Numbers[largestNodeIndex] < Numbers[left]){
+        largestNodeIndex = left
+    }
+    if(right < n && Numbers[largestNodeIndex] < Numbers[right]){
+        largestNodeIndex = right
+    }
+
+    SetBarsColor([largestNodeIndex], HighlightColor)
+    await sleep(slowSpeed)
+  
+    SetBarsColor([i], DefaultColor)
+    if(left < n){
+        SetBarsColor([left], DefaultColor)
+    }
+    if(right < n){
+        SetBarsColor([right], DefaultColor)
+    }
+
+    if(largestNodeIndex != i){
+        SetBarsColor([largestNodeIndex], HighlightColor)
+        SwapNumbers(Numbers, largestNodeIndex, i)
+        Swapbars(largestNodeIndex, i)
+        await sleep(slowSpeed)
+        SetBarsColor([i], DefaultColor)
+        await Max_Heapify(Numbers, largestNodeIndex, n)
+    }
+}
+
+async function BuildMaxHeap(Numbers){
+    for(var i=Math.floor(Numbers.length/2)-1; i>=0; i--){
+        await Max_Heapify(Numbers, i, Numbers.length)
+    }
+}
+
+async function HeapSort(Numbers){
+    await BuildMaxHeap(Numbers)
+
+    for(var i=Numbers.length-1; i>=0; i--){
+        SwapNumbers(Numbers, i, 0)
+        Swapbars(i, 0)
+        SetBarsColor([i], CompletedColor)
+        await sleep(mediumSpeed)
+        await Max_Heapify(Numbers, 0, i)
+    }
+}
+
+async function HeapSortDriver(Numbers){
+    await HeapSort(Numbers)
+    SetBarsColor([0], CompletedColor)
+    SetSubmitButtonDisabledState(false)
 }
 
 function OnClickInsertAnArray(){
@@ -246,7 +316,7 @@ function OnClickInsertAnArray(){
         var InputTextArea = document.createElement("textarea");
         InputTextArea.setAttribute("id", "InputTextArea");
         
-        var InfoMessage = document.createTextNode("Enter the numbers separated by space:"); 
+        var InfoMessage = document.createTextNode("Enter numbers separated by space:"); 
         var SubmitButtonText = document.createTextNode("Submit"); 
         var InputSubmitButton = document.createElement("button");
         InputSubmitButton.setAttribute("id", "InputSubmitButton");
@@ -294,7 +364,7 @@ function OnClickInputSubmitButton(){
             QuickSortDriver(ArrayElements)
         }
         else if( SortingChoice == "Heap" ){
-            console.log(SortingChoice)
+            HeapSortDriver(ArrayElements)
         }
     }
 }
