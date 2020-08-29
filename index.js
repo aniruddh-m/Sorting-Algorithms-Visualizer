@@ -250,7 +250,11 @@ async function QuickSort(Numbers, left, right){
         await QuickSortPartition(Numbers, left, right, PartitionIndex)
         SetBarsColor([PartitionIndex[0]], CompletedColor)
         await QuickSort(Numbers, left, PartitionIndex[0]-1)
+        var LeftRange = range(left, PartitionIndex[0])
+        SetBarsColor(LeftRange, CompletedColor)
         await QuickSort(Numbers, PartitionIndex[0]+1, right)
+        var RightRange = range(PartitionIndex[0]+1, right+1)
+        SetBarsColor(RightRange, CompletedColor)
     }
 }
 
