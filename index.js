@@ -372,7 +372,7 @@ function OnClickInputSubmitButton(){
         }
 
         if(InvalidEntry){
-            alert("All negative numbers will be ignored")
+            alert("All negative numbers and invalid entries will be ignored")
         }
         if(ArrayElements.length >= 60){
             alert("Enter fewer than 60 elements")
