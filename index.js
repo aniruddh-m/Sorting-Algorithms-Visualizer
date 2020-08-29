@@ -4,15 +4,12 @@ const HighlightColor = "SlateBlue"
 const DefaultColor = "Gray"
 const CompletedColor = "#82b74b"
 const TraverseColor = "purple"
-const slowSpeed = 1000
-const mediumSpeed = 100
-const highSpeed = 10
+var SortingSpeed = 505
 
 function createNumberBars(ArrayElements){
     var VisualArea = document.getElementById("SortingArea")
     var WidthOfBars = screen.availWidth/(ArrayElements.length)
     VisualArea.innerHTML = ''
-    var a= 0;
     for(var i=0; i<ArrayElements.length; i++){
         var ElementValue = document.createElement("p")
         ElementValue.innerHTML = ArrayElements[i].toString()
@@ -103,7 +100,7 @@ async function BubbleSort(Numbers){
         for(var j=0; j<Numbers.length-i-1; j++){
             if( Numbers[j] > Numbers[j+1] ){
                 SetBarsColor([j, j+1], HighlightColor)
-                await sleep(mediumSpeed)
+                await sleep(SortingSpeed)
                 Swapbars(j, j+1)
                 SetBarsColor([j, j+1], DefaultColor)
                 SwapNumbers(Numbers, j, j+1)
@@ -126,7 +123,7 @@ async function SelectionSort(Numbers){
         SetBarsColor([0], HighlightColor)
         for(var j=1; j<Numbers.length-i; j++){
             SetBarsColor([j], TraverseColor)
-            await sleep(mediumSpeed)
+            await sleep(SortingSpeed)
             if(Numbers[j] > Numbers[maxInd]){
                 SetBarsColor([maxInd], DefaultColor)
                 maxInd = j
@@ -149,11 +146,12 @@ async function InsertionSort(Numbers){
         j = i-1
         SetBarsColor([i], HighlightColor)
         while(Numbers[j] > Numbers[j+1] && j >= 0){
-            await sleep(mediumSpeed)
+            await sleep(SortingSpeed)
             SwapNumbers(Numbers, j, j+1)
             Swapbars(j, j+1)
             j = j-1
         }
+        await sleep(SortingSpeed)
         SetBarsColor([j+1], DefaultColor)
         var RangeArray = range(0, i+1)
         SetBarsColor(RangeArray, TraverseColor)
@@ -175,7 +173,7 @@ async function Merge(Numbers, left, mid, right){
     while(ptr1 <= mid-left && ptr2 <= right-(mid+1)){
         SetBarsColor([left+absPos], HighlightColor)
         SetBarsColor([mid+1+ptr2], TraverseColor)
-        await sleep(mediumSpeed)
+        await sleep(SortingSpeed)
         if(LeftArray[ptr1] <= RightArray[ptr2]){
             Numbers[left+absPos] = LeftArray[ptr1]
             SetBarsColor([left+absPos, mid+1+ptr2], DefaultColor)
@@ -185,7 +183,7 @@ async function Merge(Numbers, left, mid, right){
         else{
             Numbers[left+absPos] = RightArray[ptr2]
             InsertElementInSpecifiedPosition(mid+1+ptr2, left+absPos)
-            await sleep(mediumSpeed)
+            await sleep(SortingSpeed)
             SetBarsColor([mid+1+ptr2, left+absPos, left+absPos+1], DefaultColor)
             ptr2++;
             absPos++;
@@ -229,12 +227,12 @@ async function QuickSortPartition(Numbers, left, right, PartitionIndex){
     SetBarsColor([right], HighlightColor)
     for(var j=left; j < right; j++){
         SetBarsColor([i+1, j], TraverseColor)
-        await sleep(slowSpeed)
+        await sleep(SortingSpeed)
         if(Numbers[j] < pivot){
             i++
             Swapbars(j, i)
             SwapNumbers(Numbers, j, i)
-            await sleep(slowSpeed)
+            await sleep(SortingSpeed)
             SetBarsColor([i, j], DefaultColor)
         }
         else{
@@ -243,7 +241,7 @@ async function QuickSortPartition(Numbers, left, right, PartitionIndex){
     }
     SwapNumbers(Numbers, right, i+1)
     Swapbars(right, i+1)
-    await sleep(slowSpeed)
+    await sleep(SortingSpeed)
     PartitionIndex[0] = i+1
 }
 
@@ -275,7 +273,7 @@ async function Max_Heapify(Numbers, i, n){
     if(right < n){
         SetBarsColor([right], TraverseColor)
     }
-    await sleep(slowSpeed)
+    await sleep(SortingSpeed)
 
     if(left < n && Numbers[largestNodeIndex] < Numbers[left]){
         largestNodeIndex = left
@@ -285,7 +283,7 @@ async function Max_Heapify(Numbers, i, n){
     }
 
     SetBarsColor([largestNodeIndex], HighlightColor)
-    await sleep(slowSpeed)
+    await sleep(SortingSpeed)
   
     SetBarsColor([i], DefaultColor)
     if(left < n){
@@ -299,7 +297,7 @@ async function Max_Heapify(Numbers, i, n){
         SetBarsColor([largestNodeIndex], HighlightColor)
         SwapNumbers(Numbers, largestNodeIndex, i)
         Swapbars(largestNodeIndex, i)
-        await sleep(slowSpeed)
+        await sleep(SortingSpeed)
         SetBarsColor([i], DefaultColor)
         await Max_Heapify(Numbers, largestNodeIndex, n)
     }
@@ -318,7 +316,7 @@ async function HeapSort(Numbers){
         SwapNumbers(Numbers, i, 0)
         Swapbars(i, 0)
         SetBarsColor([i], CompletedColor)
-        await sleep(mediumSpeed)
+        await sleep(SortingSpeed)
         await Max_Heapify(Numbers, 0, i)
     }
 }
@@ -410,4 +408,8 @@ function SortTheArray(){
     else if( SortingChoice == "Heap" ){
         HeapSortDriver(ArrayElements)
     }
+}
+
+function UpdateSliderSpeed(){
+    SortingSpeed = 1005 - document.getElementById('SortingSpeed').value
 }

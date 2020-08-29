@@ -25,14 +25,22 @@
         <div class="ToolBar" id="TopBar">
             <span><button class="topbutton" onclick="GenerateRandomArray()" id="GenerateRandomArrayButton">Create Random Array</button></span>
             <span><button class="topbutton" id="InsertAnArray" onclick="OnClickInsertAnArray()">Insert an array</button></span>           
-            <select name="SortingMethod" id="SortingAlgos">
-                <option value="Bubble">Bubble Sort</option>
-                <option value="Selection">Selection Sort</option>
-                <option value="Insertion">Insertion Sort</option>
-                <option value="Merge">Merge Sort</option>
-                <option value="Quick">Quick Sort</option>
-                <option value="Heap">Heap Sort</option>
-            </select>
+            <span>
+                <select name="SortingMethod" id="SortingAlgos">
+                    <option value="Bubble">Bubble Sort</option>
+                    <option value="Selection">Selection Sort</option>
+                    <option value="Insertion">Insertion Sort</option>
+                    <option value="Merge">Merge Sort</option>
+                    <option value="Quick">Quick Sort</option>
+                    <option value="Heap">Heap Sort</option>
+                </select>
+            </span>
+            <span style="padding-left: 80px; color: white">
+                Sorting Speed
+            </span>
+            <span class="slidecontainer">
+                <input type="range" min="1" max="1000" value="500" class="slider" id="SortingSpeed" onchange="UpdateSliderSpeed()">
+            </span>
         </div>
         <div id = "InputArea" class="container" style="padding-left: 0px; margin-left: 40px; margin-right: 0px;">
         </div>
