@@ -3,6 +3,7 @@ Input:
     The numbers entered by the user have be separated by space and negative numbers and numbers greater than 250 are not allowed. The total number of numbers that a user can specify in the text box can not be more than 60.
 
 Sorting:
+
     1) Bubble Sort:
         -> GREEN bars represent numbers that are present in the correct position and don't have to be moved anymore
         -> The two BLUE bars represent the numbers that are compared in an iteration
