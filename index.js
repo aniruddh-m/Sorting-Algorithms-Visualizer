@@ -97,14 +97,15 @@ async function BubbleSort(Numbers){
     for(var i=0; i<Numbers.length; i++){
         var swapped = false
         for(var j=0; j<Numbers.length-i-1; j++){
+            SetBarsColor([j, j+1], HighlightColor)
             if( Numbers[j] > Numbers[j+1] ){
-                SetBarsColor([j, j+1], HighlightColor)
                 await sleep(SortingSpeed)
                 Swapbars(j, j+1)
-                SetBarsColor([j, j+1], DefaultColor)
                 SwapNumbers(Numbers, j, j+1)
                 swapped = true
             }
+            await sleep(SortingSpeed)
+            SetBarsColor([j, j+1], DefaultColor)
         }
         if(!swapped){
             var RangeArray = range(0, Numbers.length-i)
