@@ -2,7 +2,7 @@ https://aniruddh-m.github.io/Sorting-Algorithms-Visualizer/.
 
 Input:
     If the user wants to specify an array of their choice, they can do so by clicking on the "Insert an array" button on the top, which presents the users with a text box for them to enter their inputs. 
-    The numbers entered by the user have be separated by space and negative numbers and numbers greater than 250 are not allowed. The total number of numbers that a user specifies in the text box can not be more than 60.
+    The numbers entered by the user have to be separated by space and negative numbers and numbers greater than 250 are not allowed. The total number of numbers that a user specifies in the text box can not be more than 60.
 
 Sorting:
 
