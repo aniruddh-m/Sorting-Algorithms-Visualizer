@@ -128,6 +128,7 @@ async function SelectionSort(Numbers){
                 SetBarsColor([maxInd], DefaultColor)
                 maxInd = j
                 SetBarsColor([maxInd], HighlightColor)
+                await sleep(SortingSpeed)
             }
             else{
                 SetBarsColor([j], DefaultColor)
@@ -137,6 +138,7 @@ async function SelectionSort(Numbers){
         SwapNumbers(Numbers, Numbers.length-i-1, maxInd)
         SetBarsColor([maxInd], DefaultColor)
         SetBarsColor([Numbers.length-i-1], CompletedColor)
+        await sleep(SortingSpeed)
     }
     DisableButtons(false)
 }
